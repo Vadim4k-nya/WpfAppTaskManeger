@@ -17,23 +17,28 @@ namespace WpfAppTaskManeger
     public partial class MainWindow : Window
     {
         
-        
+        public List<ToDo> toDoList = new List<ToDo>();
+        public DateTime defDate = new DateTime(2024,01,10);
+        public string defDescription = "Описания нет";
 
         public MainWindow()
         {
             InitializeComponent();
 
-            dateToDo.SelectedDate = new DateTime(2024,01,10);
-            descriptionToDo.Text = "Описания нет";
+            dateToDo.SelectedDate = defDate;
+            descriptionToDo.Text = defDescription;
 
-            List<ToDo> toDoList = new List<ToDo>();
             toDoList.Add(new("Приготовить покушать", new(2024, 01, 15), "Нет описания"));
             toDoList.Add(new("Поработать", new(2024, 01, 20), "Съездить на совещание в Москву"));
             toDoList.Add(new("Отдохнуть", new(2024, 01, 02), "Съездить в отпуск в Сочи"));
 
-            
-            
             listToDo.ItemsSource = toDoList;
+
+             
+            
+            groupBoxToDo.Visibility = Visibility.Collapsed;
+
+            
         }
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
@@ -48,12 +53,25 @@ namespace WpfAppTaskManeger
 
         private void buttonDel_Click(object sender, RoutedEventArgs e)
         {
-            ToDo taskForDelete = listToDo.SelectedItems as ToDo;
-            if (taskForDelete != null)
+            if (listToDo.SelectedItem != null)
             {
-                listToDo.SelectedItems.Remove(taskForDelete);
-                listToDo.ItemsSource = null;
+                ToDo taskForDelete = listToDo.SelectedItem as ToDo;
+                if (taskForDelete != null)
+                {
+                    toDoList.Remove(taskForDelete);
+
+                    listToDo.ItemsSource = null;
+                    listToDo.ItemsSource = toDoList;
+                }
             }
+
+
+            //ToDo taskForDelete = listToDo.SelectedItems as ToDo;
+            //if (taskForDelete != null)
+            //{
+            //    listToDo.SelectedItems.Remove(taskForDelete);
+            //    listToDo.ItemsSource = null;
+            //}
             else
             {
                 MessageBox.Show("ненене");
@@ -62,15 +80,23 @@ namespace WpfAppTaskManeger
 
         private void buttonAdd_Click(object sender, RoutedEventArgs e)
         {
-        //    ToDo newTask = new (titleToDo.Text, dateToDo.SelectedDate.Value, descriptionToDo.Text);
-        //    toDoList.Add(newTask);
-            
-        //    titleToDo.Text = string.Empty;
-        //    dateToDo.SelectedDate = null;
-        //    descriptionToDo.Text = string.Empty;
+            if (dateToDo.SelectedDate != null)
+            {
+                ToDo newTask = new(titleToDo.Text, dateToDo.SelectedDate.Value, descriptionToDo.Text);
+                toDoList.Add(newTask);
 
-        //    listToDo.ItemsSource = null;
-        //    listToDo.ItemsSource = toDoList;
+                titleToDo.Text = string.Empty;
+                dateToDo.SelectedDate = defDate;
+                descriptionToDo.Text = defDescription;
+
+                listToDo.ItemsSource = null;
+                listToDo.ItemsSource = toDoList;
+            }
+            else
+            {
+                MessageBox.Show("ненене");
+            }
+            
         }
     }
 }
