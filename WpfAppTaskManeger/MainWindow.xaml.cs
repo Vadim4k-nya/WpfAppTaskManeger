@@ -60,7 +60,7 @@ namespace WpfAppTaskManeger
                 {
                     toDoList.Remove(taskForDelete);
 
-                    UpdateListToDo();
+                    UpdateListToDo(); 
                 }
             }
             else
