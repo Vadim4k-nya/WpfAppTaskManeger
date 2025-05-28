@@ -60,18 +60,9 @@ namespace WpfAppTaskManeger
                 {
                     toDoList.Remove(taskForDelete);
 
-                    listToDo.ItemsSource = null;
-                    listToDo.ItemsSource = toDoList;
+                    UpdateListToDo();
                 }
             }
-
-
-            //ToDo taskForDelete = listToDo.SelectedItems as ToDo;
-            //if (taskForDelete != null)
-            //{
-            //    listToDo.SelectedItems.Remove(taskForDelete);
-            //    listToDo.ItemsSource = null;
-            //}
             else
             {
                 MessageBox.Show("ненене");
@@ -89,14 +80,18 @@ namespace WpfAppTaskManeger
                 dateToDo.SelectedDate = defDate;
                 descriptionToDo.Text = defDescription;
 
-                listToDo.ItemsSource = null;
-                listToDo.ItemsSource = toDoList;
+                UpdateListToDo();
             }
             else
             {
                 MessageBox.Show("ненене");
             }
-            
+        }
+
+        public void UpdateListToDo()
+        {
+            listToDo.ItemsSource = null;
+            listToDo.ItemsSource = toDoList;
         }
     }
 }
