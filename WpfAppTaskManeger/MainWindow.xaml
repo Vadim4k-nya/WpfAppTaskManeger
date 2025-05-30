@@ -5,18 +5,38 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfAppTaskManeger"
         mc:Ignorable="d"
-        Title="Список дел" Height="450" Width="800">
+        Title="Список дел" Height="450" Width="400" Icon="./icons/icon.png">
     <Grid Background="#FFFDFAF1">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="1*"/>
-        </Grid.ColumnDefinitions>
+        <DockPanel>
+            <Grid DockPanel.Dock="Top">
+                <TextBlock Text="Список дел" FontSize="26" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"/>
 
-        <DockPanel Grid.Column="0">
-            <TextBlock Text="Список дел" FontSize="26" DockPanel.Dock="Top" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,10,0,0"/>
+                <Button Name="buttonAdd" Click="buttonAdd_Click" Content="Добавить дело" HorizontalAlignment="Right" VerticalAlignment="Center" 
+                        ToolTip="При добавлении дело появиться с право и его придется выполнить" 
+                        Height="30" Width="100" Margin="0,10,10,0" Background="#5EBEC4"
+                />
+            </Grid>
 
-            <Button Click="buttonDel_Click" Content="Удалить дела" Height="30" Width="100" DockPanel.Dock="Bottom" Margin="0,0,0,10" Background="#5EBEC4"/>
-
+            <DataGrid Name="listToDo" Margin="10" AutoGenerateColumns="False" Background="#FDF5DF">
+                <DataGrid.Columns>
+                    <DataGridCheckBoxColumn Width="0.5*"/>
+                    <DataGridTextColumn Width="2*" Binding="{Binding Path=Title}"/>
+                    <DataGridTextColumn Width="1*" Binding="{Binding Path=Date}"/>
+                    <DataGridTemplateColumn Width="0.5*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Click="buttonDel_Click" Content="X" Background="#5EBEC4"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+                <DataGrid.RowDetailsTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Path=Description}"/>
+                    </DataTemplate>
+                </DataGrid.RowDetailsTemplate>
+            </DataGrid>
+            <!--
             <ListBox x:Name="listToDo" Grid.Row="1" Grid.Column="0" Margin="10"  Background="#FDF5DF">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
@@ -28,24 +48,7 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-        </DockPanel>
-
-        <DockPanel Grid.Column="1">
-            <CheckBox Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" Content="Добавление новых дел" DockPanel.Dock="Top" VerticalAlignment="Bottom" Margin="10,27,0,0"/>
-
-            <Button Name="buttonAdd" Click="buttonAdd_Click" Content="Добавить дело"  ToolTip="При добавлении дело появиться с право и его придется выполнить" 
-                    Height="30" Width="100" DockPanel.Dock="Bottom" Margin="0,0,0,10" Background="#5EBEC4"/>
-
-            <GroupBox Name="groupBoxToDo" Grid.Row="1" Grid.Column="1" Margin="10" Background="#FDF5DF">
-                <StackPanel Margin="5">
-                    <TextBlock Text="Название:" Margin="2"/>
-                    <TextBox Name="titleToDo" Margin="2"/>
-                    <TextBlock Text="Выполнить до:" Margin="2"/>
-                    <DatePicker Name="dateToDo" Margin="2"/>
-                    <TextBlock Text="Описание:" Margin="2"/>
-                    <TextBox Name="descriptionToDo" MinLines="10" Margin="2"/>
-                </StackPanel>
-            </GroupBox>
+            -->
         </DockPanel>
     </Grid>
 </Window>
