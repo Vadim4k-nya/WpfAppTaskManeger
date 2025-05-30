@@ -25,30 +25,11 @@ namespace WpfAppTaskManeger
         {
             InitializeComponent();
 
-            dateToDo.SelectedDate = defDate;
-            descriptionToDo.Text = defDescription;
-
             toDoList.Add(new("Приготовить покушать", new(2024, 01, 15), "Нет описания"));
             toDoList.Add(new("Поработать", new(2024, 01, 20), "Съездить на совещание в Москву"));
             toDoList.Add(new("Отдохнуть", new(2024, 01, 02), "Съездить в отпуск в Сочи"));
 
             listToDo.ItemsSource = toDoList;
-
-             
-            
-            groupBoxToDo.Visibility = Visibility.Collapsed;
-
-            
-        }
-
-        private void CheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            groupBoxToDo.Visibility = Visibility.Visible;
-        }
-
-        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            groupBoxToDo.Visibility = Visibility.Collapsed;
         }
 
         private void buttonDel_Click(object sender, RoutedEventArgs e)
@@ -71,21 +52,28 @@ namespace WpfAppTaskManeger
 
         private void buttonAdd_Click(object sender, RoutedEventArgs e)
         {
-            if (dateToDo.SelectedDate != null)
-            {
-                ToDo newTask = new(titleToDo.Text, dateToDo.SelectedDate.Value, descriptionToDo.Text);
-                toDoList.Add(newTask);
 
-                titleToDo.Text = string.Empty;
-                dateToDo.SelectedDate = defDate;
-                descriptionToDo.Text = defDescription;
+            AddToDo addToDoWindow = new AddToDo();
 
-                UpdateListToDo();
-            }
-            else
-            {
-                MessageBox.Show("ненене");
-            }
+            addToDoWindow.Owner = this; 
+
+            addToDoWindow.Show();
+
+            //if (dateToDo.SelectedDate != null)
+            //{
+            //    ToDo newTask = new(titleToDo.Text, dateToDo.SelectedDate.Value, descriptionToDo.Text);
+            //    toDoList.Add(newTask);
+
+            //    titleToDo.Text = string.Empty;
+            //    dateToDo.SelectedDate = defDate;
+            //    descriptionToDo.Text = defDescription;
+
+            //    UpdateListToDo();
+            //}
+            //else
+            //{
+            //    MessageBox.Show("ненене");
+            //}
         }
 
         public void UpdateListToDo()
