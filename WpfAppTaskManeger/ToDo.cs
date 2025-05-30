@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WpfAppTaskManeger
 {
     public class ToDo
     {
         private string _title;
-        private string _description;
         private DateTime _date;
+        private string _description;
 
         public string Title
         {
@@ -28,11 +29,13 @@ namespace WpfAppTaskManeger
             set { _description = value; }
         }
 
-        public ToDo(string title, string description)
+        public ToDo()
         {
-            Title = title;
-            Description = description;
+            Title = "";
+            Date = new DateTime();
+            Description = "";
         }
+
         public ToDo(string title, DateTime date, string description)
         {
             Title = title;

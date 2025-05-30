@@ -17,14 +17,12 @@ namespace WpfAppTaskManeger
     public partial class MainWindow : Window
     {
         
-        public List<ToDo> toDoList = new List<ToDo>();
-        public DateTime defDate = new DateTime(2024,01,10);
-        public string defDescription = "Описания нет";
+        public static List<ToDo> toDoList = new List<ToDo>();
 
         public MainWindow()
         {
             InitializeComponent();
-
+            
             toDoList.Add(new("Приготовить покушать", new(2024, 01, 15), "Нет описания"));
             toDoList.Add(new("Поработать", new(2024, 01, 20), "Съездить на совещание в Москву"));
             toDoList.Add(new("Отдохнуть", new(2024, 01, 02), "Съездить в отпуск в Сочи"));
@@ -52,34 +50,19 @@ namespace WpfAppTaskManeger
 
         private void buttonAdd_Click(object sender, RoutedEventArgs e)
         {
-
             AddToDo addToDoWindow = new AddToDo();
 
             addToDoWindow.Owner = this; 
 
             addToDoWindow.Show();
 
-            //if (dateToDo.SelectedDate != null)
-            //{
-            //    ToDo newTask = new(titleToDo.Text, dateToDo.SelectedDate.Value, descriptionToDo.Text);
-            //    toDoList.Add(newTask);
+            listToDo.ItemsSource = AddToDo.newTask;
 
-            //    titleToDo.Text = string.Empty;
-            //    dateToDo.SelectedDate = defDate;
-            //    descriptionToDo.Text = defDescription;
-
-            //    UpdateListToDo();
-            //}
-            //else
-            //{
-            //    MessageBox.Show("ненене");
-            //}
         }
 
-        public void UpdateListToDo()
+        public static void UpdateListToDo()
         {
-            listToDo.ItemsSource = null;
-            listToDo.ItemsSource = toDoList;
+            listToDo.Items.Refresh();
         }
     }
 }

@@ -5,27 +5,31 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfAppTaskManeger"
         mc:Ignorable="d"
-        Title="Список дел" Height="450" Width="400" Icon="./icons/icon.png">
+        Title="Список дел" Height="450" Width="400" Icon="C:\Users\Top\Source\Repos\WpfAppTaskManeger\WpfAppTaskManeger\icons\icon.png">
     <Grid Background="#FFFDFAF1">
         <DockPanel>
             <Grid DockPanel.Dock="Top">
                 <TextBlock Text="Список дел" FontSize="26" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"/>
 
-                <Button Name="buttonAdd" Click="buttonAdd_Click" Content="Добавить дело" HorizontalAlignment="Right" VerticalAlignment="Center" 
+                <Button Name="buttonAdd" Click="buttonAdd_Click" HorizontalAlignment="Right" VerticalAlignment="Center" 
                         ToolTip="При добавлении дело появиться с право и его придется выполнить" 
-                        Height="30" Width="100" Margin="0,10,10,0" Background="#5EBEC4"
-                />
+                        MaxHeight="35" Margin="0,10,10,0" Padding="15,3,15,3" Background="#5EBEC4"
+                >
+                    <Image Source="C:\Users\Top\Source\Repos\WpfAppTaskManeger\WpfAppTaskManeger\icons\add.png"/>
+                </Button>
             </Grid>
 
-            <DataGrid Name="listToDo" Margin="10" AutoGenerateColumns="False" Background="#FDF5DF">
+            <DataGrid x:Name="listToDo" Margin="10" AutoGenerateColumns="False" Background="#FDF5DF">
                 <DataGrid.Columns>
-                    <DataGridCheckBoxColumn Width="0.5*"/>
+                    <DataGridCheckBoxColumn Width="0.2*"/>
                     <DataGridTextColumn Width="2*" Binding="{Binding Path=Title}"/>
-                    <DataGridTextColumn Width="1*" Binding="{Binding Path=Date}"/>
-                    <DataGridTemplateColumn Width="0.5*">
+                    <DataGridTextColumn Width="1*" Binding="{Binding Path=Date, StringFormat=dd.MM.yyyy}"/>
+                    <DataGridTemplateColumn Width="0.2*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Button Click="buttonDel_Click" Content="X" Background="#5EBEC4"/>
+                                <Button Click="buttonDel_Click" Background="#5EBEC4">
+                                    <Image Source="C:\Users\Top\Source\Repos\WpfAppTaskManeger\WpfAppTaskManeger\icons\delete.png" MaxHeight="10" MaxWidth="10"/>
+                                </Button>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -36,19 +40,6 @@
                     </DataTemplate>
                 </DataGrid.RowDetailsTemplate>
             </DataGrid>
-            <!--
-            <ListBox x:Name="listToDo" Grid.Row="1" Grid.Column="0" Margin="10"  Background="#FDF5DF">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel>
-                            <TextBlock Text="{Binding Path=Title}"/>
-                            <TextBlock Text="{Binding Path=Date, StringFormat=dd.MM.yyyy}"/>
-                            <TextBlock Text="{Binding Path=Description}" Foreground="#000000" FontSize="10"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-            -->
         </DockPanel>
     </Grid>
 </Window>
