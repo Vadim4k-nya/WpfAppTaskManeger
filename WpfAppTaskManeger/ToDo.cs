@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WpfAppTaskManeger
 {
     public class ToDo
     {
         private string _title;
-        private string _description;
         private DateTime _date;
+        private string _description;
+        private bool _doing;
 
         public string Title
         {
@@ -27,17 +29,23 @@ namespace WpfAppTaskManeger
             get { return _description; }
             set { _description = value; }
         }
-
-        public ToDo(string title, string description)
+        public bool Doing
         {
-            Title = title;
-            Description = description;
+            get { return _doing; }
+            set { _doing = value; }
         }
+
         public ToDo(string title, DateTime date, string description)
         {
             Title = title;
             Date = date;
             Description = description;
+        }
+
+        public ToDo(string title, DateTime date, string description, bool doing) 
+            : this(title, date, description)
+        {
+            Doing = doing;
         }
     }
 }

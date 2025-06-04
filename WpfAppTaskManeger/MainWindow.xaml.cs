@@ -17,50 +17,30 @@ namespace WpfAppTaskManeger
     public partial class MainWindow : Window
     {
         
-        public List<ToDo> toDoList = new List<ToDo>();
-        public DateTime defDate = new DateTime(2024,01,10);
-        public string defDescription = "Описания нет";
+        public static List<ToDo> toDoList = new List<ToDo>();
 
         public MainWindow()
         {
             InitializeComponent();
-
-            dateToDo.SelectedDate = defDate;
-            descriptionToDo.Text = defDescription;
-
+            
             toDoList.Add(new("Приготовить покушать", new(2024, 01, 15), "Нет описания"));
             toDoList.Add(new("Поработать", new(2024, 01, 20), "Съездить на совещание в Москву"));
             toDoList.Add(new("Отдохнуть", new(2024, 01, 02), "Съездить в отпуск в Сочи"));
 
+
             listToDo.ItemsSource = toDoList;
-
-             
-            
-            groupBoxToDo.Visibility = Visibility.Collapsed;
-
-            
-        }
-
-        private void CheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            groupBoxToDo.Visibility = Visibility.Visible;
-        }
-
-        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            groupBoxToDo.Visibility = Visibility.Collapsed;
         }
 
         private void buttonDel_Click(object sender, RoutedEventArgs e)
         {
             if (listToDo.SelectedItem != null)
             {
+                listToDo.CancelEdit();
                 ToDo taskForDelete = listToDo.SelectedItem as ToDo;
                 if (taskForDelete != null)
                 {
                     toDoList.Remove(taskForDelete);
-
-                    UpdateListToDo(); 
+                    listToDo.Items.Refresh();
                 }
             }
             else
@@ -71,27 +51,28 @@ namespace WpfAppTaskManeger
 
         private void buttonAdd_Click(object sender, RoutedEventArgs e)
         {
-            if (dateToDo.SelectedDate != null)
-            {
-                ToDo newTask = new(titleToDo.Text, dateToDo.SelectedDate.Value, descriptionToDo.Text);
-                toDoList.Add(newTask);
+            AddToDo addToDoWindow = new AddToDo();
 
-                titleToDo.Text = string.Empty;
-                dateToDo.SelectedDate = defDate;
-                descriptionToDo.Text = defDescription;
+            addToDoWindow.Owner = this; 
 
-                UpdateListToDo();
-            }
-            else
+            addToDoWindow.Show();
+        }
+
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            
+            if (listToDo.SelectedItem != null)
             {
-                MessageBox.Show("ненене");
+                toDoList.FirstOrDefault(listToDo.SelectedItem as ToDo).Doing = true;
             }
         }
 
-        public void UpdateListToDo()
+        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
-            listToDo.ItemsSource = null;
-            listToDo.ItemsSource = toDoList;
+            if(listToDo.SelectedItem != null)
+            {
+                toDoList.FirstOrDefault(listToDo.SelectedItem as ToDo).Doing = false;
+            }
         }
     }
 }
