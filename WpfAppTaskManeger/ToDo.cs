@@ -12,6 +12,7 @@ namespace WpfAppTaskManeger
         private string _title;
         private DateTime _date;
         private string _description;
+        private bool _doing;
 
         public string Title
         {
@@ -28,12 +29,10 @@ namespace WpfAppTaskManeger
             get { return _description; }
             set { _description = value; }
         }
-
-        public ToDo()
+        public bool Doing
         {
-            Title = "";
-            Date = new DateTime();
-            Description = "";
+            get { return _doing; }
+            set { _doing = value; }
         }
 
         public ToDo(string title, DateTime date, string description)
@@ -41,6 +40,12 @@ namespace WpfAppTaskManeger
             Title = title;
             Date = date;
             Description = description;
+        }
+
+        public ToDo(string title, DateTime date, string description, bool doing) 
+            : this(title, date, description)
+        {
+            Doing = doing;
         }
     }
 }

@@ -27,6 +27,7 @@ namespace WpfAppTaskManeger
             toDoList.Add(new("Поработать", new(2024, 01, 20), "Съездить на совещание в Москву"));
             toDoList.Add(new("Отдохнуть", new(2024, 01, 02), "Съездить в отпуск в Сочи"));
 
+
             listToDo.ItemsSource = toDoList;
         }
 
@@ -38,8 +39,7 @@ namespace WpfAppTaskManeger
                 if (taskForDelete != null)
                 {
                     toDoList.Remove(taskForDelete);
-
-                    UpdateListToDo(); 
+                    listToDo.Items.Refresh();
                 }
             }
             else
@@ -55,14 +55,19 @@ namespace WpfAppTaskManeger
             addToDoWindow.Owner = this; 
 
             addToDoWindow.Show();
+        }
 
-            listToDo.ItemsSource = AddToDo.newTask;
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
 
         }
 
-        public static void UpdateListToDo()
+        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
-            listToDo.Items.Refresh();
+            if(listToDo.SelectedItem != null)
+            {
+
+            }
         }
     }
 }

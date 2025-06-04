@@ -8,4 +8,9 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Resource Include="icons\add.png" />
+    <Resource Include="icons\icon.png" />
+  </ItemGroup>
+
 </Project>

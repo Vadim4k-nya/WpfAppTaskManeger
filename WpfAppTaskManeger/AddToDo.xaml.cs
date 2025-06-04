@@ -20,7 +20,6 @@ namespace WpfAppTaskManeger
     /// </summary>
     public partial class AddToDo : Window
     {
-        public static ToDo newTask = new ToDo();
         public DateTime defDate = new DateTime(2024, 01, 10);
         public string defDescription = "Описания нет";
 
@@ -35,7 +34,9 @@ namespace WpfAppTaskManeger
         {
             if (dateToDo.SelectedDate != null)
             {
-                newTask = new ToDo(titleToDo.Text, dateToDo.SelectedDate.Value, descriptionToDo.Text);
+                MainWindow.toDoList.Add(new ToDo(titleToDo.Text, dateToDo.SelectedDate.Value, descriptionToDo.Text));
+
+                (this.Owner as MainWindow).listToDo.Items.Refresh();
 
                 titleToDo.Text = string.Empty;
                 dateToDo.SelectedDate = defDate;
