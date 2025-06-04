@@ -35,6 +35,8 @@ namespace WpfAppTaskManeger
             if (dateToDo.SelectedDate != null)
             {
                 MainWindow.toDoList.Add(new ToDo(titleToDo.Text, dateToDo.SelectedDate.Value, descriptionToDo.Text));
+                
+                (this.Owner as MainWindow).listToDo.CancelEdit();
 
                 (this.Owner as MainWindow).listToDo.Items.Refresh();
 

@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Список дел" Height="450" Width="400" Icon="/Image/icon.png">
     <Grid Background="#FFFDFAF1">
-        <DockPanel>
+        <DockPanel x:Name="dockPanel">
             <Grid DockPanel.Dock="Top">
                 <TextBlock Text="Список дел" FontSize="26" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"/>
 
@@ -19,7 +19,7 @@
                 </Button>
             </Grid>
 
-            <DataGrid x:Name="listToDo" Margin="10" AutoGenerateColumns="False" Background="#FDF5DF">
+            <DataGrid x:Name="listToDo" Margin="10" AutoGenerateColumns="False" Background="#FDF5DF" HorizontalScrollBarVisibility="Disabled">
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Width="0.2*">
                         <DataGridTemplateColumn.CellTemplate>
@@ -42,7 +42,8 @@
                 </DataGrid.Columns>
                 <DataGrid.RowDetailsTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding Path=Description}"/>
+                        <TextBox Text="{Binding Path=Description}" TextWrapping="Wrap" AcceptsReturn="True" MaxLines="5" 
+                                 VerticalScrollBarVisibility="Auto" HorizontalAlignment="Stretch"/>
                     </DataTemplate>
                 </DataGrid.RowDetailsTemplate>
             </DataGrid>

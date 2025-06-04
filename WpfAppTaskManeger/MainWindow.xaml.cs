@@ -35,6 +35,7 @@ namespace WpfAppTaskManeger
         {
             if (listToDo.SelectedItem != null)
             {
+                listToDo.CancelEdit();
                 ToDo taskForDelete = listToDo.SelectedItem as ToDo;
                 if (taskForDelete != null)
                 {
@@ -59,6 +60,7 @@ namespace WpfAppTaskManeger
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
+            
             if (listToDo.SelectedItem != null)
             {
                 toDoList.FirstOrDefault(listToDo.SelectedItem as ToDo).Doing = true;

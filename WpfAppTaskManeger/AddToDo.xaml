@@ -20,7 +20,7 @@
                     <TextBlock Text="Выполнить до:" Margin="2"/>
                     <DatePicker Name="dateToDo" Margin="2"/>
                     <TextBlock Text="Описание:" Margin="2"/>
-                    <TextBox Name="descriptionToDo" MinLines="10" Margin="2"/>
+                    <TextBox Name="descriptionToDo" MinLines="10" MaxLines="10" Margin="2" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/>
                 </StackPanel>
             </GroupBox>
         </DockPanel>
