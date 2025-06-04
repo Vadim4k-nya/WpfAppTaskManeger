@@ -59,14 +59,17 @@ namespace WpfAppTaskManeger
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
-
+            if (listToDo.SelectedItem != null)
+            {
+                toDoList.FirstOrDefault(listToDo.SelectedItem as ToDo).Doing = true;
+            }
         }
 
         private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
             if(listToDo.SelectedItem != null)
             {
-
+                toDoList.FirstOrDefault(listToDo.SelectedItem as ToDo).Doing = false;
             }
         }
     }
