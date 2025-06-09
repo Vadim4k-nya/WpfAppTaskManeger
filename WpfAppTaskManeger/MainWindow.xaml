@@ -17,6 +17,10 @@
             <Setter Property="GridLinesVisibility" Value="Horizontal"/>
             <Setter Property="HorizontalGridLinesBrush" Value="#5EBEC4"/>
         </Style>
+        <Style TargetType="ProgressBar">
+            <Setter Property="Background" Value="#FDF5DF"/>
+            <Setter Property="Foreground" Value="#5EBEC4"/>
+        </Style>
     </Window.Resources>
     <Grid Background="#FFFDFAF1">
         <DockPanel x:Name="dockPanel">
