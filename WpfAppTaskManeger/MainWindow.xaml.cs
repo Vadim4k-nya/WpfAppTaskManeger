@@ -29,6 +29,7 @@ namespace WpfAppTaskManeger
 
 
             listToDo.ItemsSource = toDoList;
+            EndToDo();
         }
 
         private void buttonDel_Click(object sender, RoutedEventArgs e)
@@ -41,6 +42,7 @@ namespace WpfAppTaskManeger
                 {
                     toDoList.Remove(taskForDelete);
                     listToDo.Items.Refresh();
+                    EndToDo();
                 }
             }
             else
@@ -63,16 +65,41 @@ namespace WpfAppTaskManeger
             
             if (listToDo.SelectedItem != null)
             {
-                toDoList.FirstOrDefault(listToDo.SelectedItem as ToDo).Doing = true;
+                int indexOfSelectedItem = toDoList.IndexOf(listToDo.SelectedItem as ToDo);
+                toDoList[indexOfSelectedItem].Doing = true;
             }
+            EndToDo();
         }
 
         private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
-            if(listToDo.SelectedItem != null)
+            
+            if (listToDo.SelectedItem != null)
             {
-                toDoList.FirstOrDefault(listToDo.SelectedItem as ToDo).Doing = false;
+                int indexOfSelectedItem = toDoList.IndexOf(listToDo.SelectedItem as ToDo);
+                toDoList[indexOfSelectedItem].Doing = false;
             }
+            EndToDo();
+        }
+
+        public void EndToDo()
+        {
+            progressToDo.Minimum = 0;
+            progressToDo.Maximum = listToDo.Items.Count;
+
+            int cmpltTaskCount = 0;
+
+            
+            foreach (var item in toDoList)
+            {
+                if (item.Doing)
+                {
+                    cmpltTaskCount++;
+                }
+            }
+
+            progressToDo.Value = cmpltTaskCount;
+            progressTextToDo.Text = $"{cmpltTaskCount}/{listToDo.Items.Count}";
         }
     }
 }

@@ -6,25 +6,41 @@
         xmlns:local="clr-namespace:WpfAppTaskManeger"
         mc:Ignorable="d"
         Title="Список дел" Height="450" Width="400" Icon="/Image/icon.png">
+    <Window.Resources>
+        <Style TargetType="DataGrid">
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="CanUserAddRows" Value="False"/>
+            <Setter Property="CanUserDeleteRows" Value="False"/>
+            <Setter Property="HeadersVisibility" Value="None"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="AlternatingRowBackground" Value="#FFFDFAF1"/>
+            <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="#5EBEC4"/>
+        </Style>
+    </Window.Resources>
     <Grid Background="#FFFDFAF1">
         <DockPanel x:Name="dockPanel">
             <Grid DockPanel.Dock="Top">
-                <TextBlock Text="Список дел" FontSize="26" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                <TextBlock Text="Список дел" Style="{StaticResource HeaderStyle}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
 
                 <Button Name="buttonAdd" Click="buttonAdd_Click" HorizontalAlignment="Right" VerticalAlignment="Center" 
-                        ToolTip="При добавлении дело появиться с право и его придется выполнить" 
-                        MaxHeight="35" Margin="0,10,10,0" Padding="15,3,15,3" Background="#5EBEC4"
-                >
+                        ToolTip="При добавлении дело появиться внизу и его придется выполнить" 
+                        MaxHeight="35" Margin="5" Padding="10,5,10,5">
                     <Image Source="/Image/add.png"/>
                 </Button>
             </Grid>
 
-            <DataGrid x:Name="listToDo" Margin="10" AutoGenerateColumns="False" Background="#FDF5DF" HorizontalScrollBarVisibility="Disabled">
+            <Grid DockPanel.Dock="Bottom">
+                <ProgressBar x:Name="progressToDo" MinHeight="25" Margin="5" Minimum="0"/>
+                <TextBlock x:Name="progressTextToDo" HorizontalAlignment="Center" VerticalAlignment="Center" Text="0/0"/>
+            </Grid>
+
+            <DataGrid x:Name="listToDo" Margin="5" Background="#FDF5DF" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden">
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Width="0.2*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <CheckBox Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" />
+                                <CheckBox IsChecked="{Binding Path=Doing}" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

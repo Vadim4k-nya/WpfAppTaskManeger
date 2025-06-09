@@ -6,9 +6,26 @@
         xmlns:local="clr-namespace:WpfAppTaskManeger"
         mc:Ignorable="d"
         Title="Добавить задачу" Height="450" Width="400" ResizeMode="NoResize" Icon="/Image/add.png">
+    <Window.Resources>
+        <Style TargetType="DatePicker">
+            <Setter Property="SelectedDateFormat" Value="Long"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="BorderBrush" Value="#5EBEC4"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CalendarStyle">
+                <Setter.Value>
+                    <Style TargetType="Calendar">
+                        <Setter Property="BorderThickness" Value="1.5"/>
+                        <Setter Property="BorderBrush" Value="#5EBEC4"/>
+                        <Setter Property="Background" Value="#FFFDFAF1"/>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
     <Grid Background="#FFFDFAF1">
         <DockPanel Grid.Column="1">
-            <TextBlock Text="Добавить дело" FontSize="26" DockPanel.Dock="Top" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,10,0,0"/>
+            <TextBlock Text="Добавить дело" Style="{StaticResource HeaderStyle}" FontSize="26" DockPanel.Dock="Top" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,10,0,0"/>
             
             <Button Name="buttonSave" Click="buttonSave_Click" Content="Сохранить дело"  ToolTip="При добавлении дело появиться с право и его придется выполнить" 
             Height="30" Width="100" DockPanel.Dock="Bottom" Margin="0,0,0,10" Background="#5EBEC4"/>

@@ -40,6 +40,8 @@ namespace WpfAppTaskManeger
 
                 (this.Owner as MainWindow).listToDo.Items.Refresh();
 
+                (this.Owner as MainWindow).EndToDo();
+
                 titleToDo.Text = string.Empty;
                 dateToDo.SelectedDate = defDate;
                 descriptionToDo.Text = defDescription;
