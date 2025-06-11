@@ -17,6 +17,7 @@
             <Setter Property="Background" Value="#FDF5DF"/>
             <Setter Property="Foreground" Value="#5EBEC4"/>
         </Style>
+        
 
         <converters:DateTimeLessDateConverter x:Key="LessDayConverter"/>
         <converters:DateTimeTodayDateConverter x:Key="TodayDayConverter"/>
