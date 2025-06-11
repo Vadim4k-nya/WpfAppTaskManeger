@@ -22,6 +22,14 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style TargetType="DatePickerTextBox">
+            <Style.Triggers>
+                <Trigger Property="IsFocused" Value="True">
+                    <Setter Property="Background" Value="#FFFFFAD6"/>
+                    <Setter Property="BorderThickness" Value="2"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
     <Grid Background="#FFFDFAF1">
         <DockPanel Grid.Column="1">

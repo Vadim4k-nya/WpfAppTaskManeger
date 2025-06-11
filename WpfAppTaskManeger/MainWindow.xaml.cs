@@ -27,23 +27,18 @@ namespace WpfAppTaskManeger
             toDoList.Add(new("Поработать", new(2024, 01, 20), "Съездить на совещание в Москву"));
             toDoList.Add(new("Отдохнуть", new(2024, 01, 02), "Съездить в отпуск в Сочи"));
 
-
             listToDo.ItemsSource = toDoList;
             EndToDo();
         }
 
         private void buttonDel_Click(object sender, RoutedEventArgs e)
         {
-            if (listToDo.SelectedItem != null)
+            ToDo taskToDelete = (sender as Button).DataContext as ToDo;
+            if (taskToDelete != null)
             {
-                listToDo.CancelEdit();
-                ToDo taskForDelete = listToDo.SelectedItem as ToDo;
-                if (taskForDelete != null)
-                {
-                    toDoList.Remove(taskForDelete);
-                    listToDo.Items.Refresh();
-                    EndToDo();
-                }
+                toDoList.Remove(taskToDelete);
+                listToDo.Items.Refresh();
+                EndToDo();
             }
             else
             {
@@ -62,12 +57,8 @@ namespace WpfAppTaskManeger
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            
-            if (listToDo.SelectedItem != null)
-            {
-                int indexOfSelectedItem = toDoList.IndexOf(listToDo.SelectedItem as ToDo);
-                toDoList[indexOfSelectedItem].Doing = true;
-            }
+            int indexOfSelectedItem = toDoList.IndexOf((sender as CheckBox).DataContext as ToDo);
+            toDoList[indexOfSelectedItem].Doing = true;
             EndToDo();
         }
 
@@ -76,7 +67,7 @@ namespace WpfAppTaskManeger
             
             if (listToDo.SelectedItem != null)
             {
-                int indexOfSelectedItem = toDoList.IndexOf(listToDo.SelectedItem as ToDo);
+                int indexOfSelectedItem = toDoList.IndexOf((sender as CheckBox).DataContext as ToDo);
                 toDoList[indexOfSelectedItem].Doing = false;
             }
             EndToDo();

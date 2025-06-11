@@ -4,23 +4,24 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfAppTaskManeger"
+        xmlns:converters="clr-namespace:WpfAppTaskManeger.Converters"
         mc:Ignorable="d"
         Title="Список дел" Height="450" Width="400" Icon="/Image/icon.png">
     <Window.Resources>
-        <Style TargetType="DataGrid">
-            <Setter Property="AutoGenerateColumns" Value="False"/>
-            <Setter Property="CanUserAddRows" Value="False"/>
-            <Setter Property="CanUserDeleteRows" Value="False"/>
-            <Setter Property="HeadersVisibility" Value="None"/>
-            <Setter Property="Background" Value="White"/>
-            <Setter Property="AlternatingRowBackground" Value="#FFFDFAF1"/>
-            <Setter Property="GridLinesVisibility" Value="Horizontal"/>
-            <Setter Property="HorizontalGridLinesBrush" Value="#5EBEC4"/>
+        <Style TargetType="ListBox">
+            <Setter Property="Background" Value="#FDF5DF"/>
+
+            
         </Style>
         <Style TargetType="ProgressBar">
             <Setter Property="Background" Value="#FDF5DF"/>
             <Setter Property="Foreground" Value="#5EBEC4"/>
         </Style>
+
+        <converters:DateTimeLessDateConverter x:Key="LessDayConverter"/>
+        <converters:DateTimeTodayDateConverter x:Key="TodayDayConverter"/>
+        <converters:DateTimeTomorrowDateConverter x:Key="TomorrowDayConverter"/>
+        <converters:DateTimeOverDateConverter x:Key="OverDayConverter"/>
     </Window.Resources>
     <Grid Background="#FFFDFAF1">
         <DockPanel x:Name="dockPanel">
@@ -39,6 +40,61 @@
                 <TextBlock x:Name="progressTextToDo" HorizontalAlignment="Center" VerticalAlignment="Center" Text="0/0"/>
             </Grid>
 
+
+            <ListBox x:Name="listToDo" HorizontalContentAlignment="Stretch" Margin="5">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="0.1*"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="0.5*"/>
+                                <ColumnDefinition Width="0.2*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+                            <CheckBox IsChecked="{Binding Path=Doing}" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" 
+                                      VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="0" Grid.Row="0"/>
+
+                            <TextBlock Text="{Binding Path=Title}" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1" />
+
+                            <TextBlock Text="{Binding Path=Date, StringFormat=dd.MM.yyyy}" 
+                                       VerticalAlignment="Center" Grid.Row="0" Grid.Column="2">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Path=Date, Converter={StaticResource LessDayConverter}}" Value="True">
+                                                <Setter Property="Foreground" Value="Red"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Path=Date, Converter={StaticResource TodayDayConverter}}" Value="True">
+                                                <Setter Property="Foreground" Value="#FFEA6A20"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Path=Date, Converter={StaticResource TomorrowDayConverter}}" Value="True">
+                                                <Setter Property="Foreground" Value="#DAA520"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Path=Date, Converter={StaticResource OverDayConverter}}" Value="True">
+                                                <Setter Property="Foreground" Value="#FF71C52F"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+
+                            <Button Click="buttonDel_Click" Background="#5EBEC4" Margin="5" MaxWidth="20" Grid.Column="3">
+                                <Image Source="/Image/delete.png" MaxHeight="10" MaxWidth="10" IsEnabled="False"/>
+                            </Button>
+
+                            <TextBlock Text="{Binding Path=Description}" TextWrapping="Wrap" 
+                                       HorizontalAlignment="Stretch" Grid.Row="1" Grid.ColumnSpan="4"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            
+            
+            <!--
             <DataGrid x:Name="listToDo" Margin="5" Background="#FDF5DF" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden">
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Width="0.2*">
@@ -67,6 +123,7 @@
                     </DataTemplate>
                 </DataGrid.RowDetailsTemplate>
             </DataGrid>
+                -->
         </DockPanel>
     </Grid>
 </Window>
