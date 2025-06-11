@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfAppTaskManeger"
         mc:Ignorable="d"
-        Title="Список дел" Height="450" Width="400" Icon="/Image/icon.png">
+        Title="Список дел" Height="450" Width="400" Icon="/Image/icon.png"
+        Loaded="Window_Loaded" Closed="Window_Closed">
     <Window.Resources>
         <Style TargetType="ListBox">
             <Setter Property="Background" Value="#FDF5DF"/>
@@ -27,11 +28,19 @@
             <Grid DockPanel.Dock="Top">
                 <TextBlock Text="Список дел" Style="{StaticResource HeaderStyle}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
 
-                <Button Name="buttonAdd" Click="buttonAdd_Click" HorizontalAlignment="Right" VerticalAlignment="Center" 
-                        ToolTip="При добавлении дело появиться внизу и его придется выполнить" 
-                        MaxHeight="35" Margin="5" Padding="10,5,10,5">
-                    <Image Source="/Image/add.png"/>
-                </Button>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <Button Name="buttonSave" Click="buttonSave_Click"
+                            ToolTip="Сохранить список дел в текстовый файл"
+                            MaxHeight="35" Margin="5" Padding="10,5,10,5">
+                        <Image Source="/Image/save.png"/>
+                    </Button>
+
+                    <Button Name="buttonAdd" Click="buttonAdd_Click"
+                            ToolTip="При добавлении дело появиться внизу и его придется выполнить"
+                            MaxHeight="35" Margin="5" Padding="10,5,10,5">
+                        <Image Source="/Image/add.png"/>
+                    </Button>
+                </StackPanel>
             </Grid>
 
             <Grid DockPanel.Dock="Bottom">

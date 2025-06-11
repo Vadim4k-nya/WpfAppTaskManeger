@@ -10,12 +10,22 @@
 
   <ItemGroup>
     <None Remove="Image\delete.png" />
+    <None Remove="Image\save.png" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="Image\add.png" />
     <Resource Include="Image\delete.png" />
     <Resource Include="Image\icon.png" />
+    <Resource Include="Image\save.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Files\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
 </Project>

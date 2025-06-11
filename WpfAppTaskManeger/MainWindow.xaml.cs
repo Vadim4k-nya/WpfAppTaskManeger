@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using Microsoft.Win32;
+using System.IO;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -8,6 +10,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Newtonsoft.Json;
+using System.Collections.ObjectModel;
 
 namespace WpfAppTaskManeger
 {
@@ -18,6 +22,8 @@ namespace WpfAppTaskManeger
     {
         
         public static List<ToDo> toDoList = new List<ToDo>();
+        private readonly string _filePath = "/Files/todo.json";
+        private readonly string _folderPath = "/Files";
 
         public MainWindow()
         {
@@ -29,6 +35,7 @@ namespace WpfAppTaskManeger
 
             listToDo.ItemsSource = toDoList;
             EndToDo();
+
         }
 
         private void buttonDel_Click(object sender, RoutedEventArgs e)
@@ -91,6 +98,83 @@ namespace WpfAppTaskManeger
 
             progressToDo.Value = cmpltTaskCount;
             progressTextToDo.Text = $"{cmpltTaskCount}/{listToDo.Items.Count}";
+        }
+
+        private void buttonSave_Click(object sender, RoutedEventArgs e)
+        {
+            SaveTxtFile();
+        }
+
+        private void SaveTxtFile()
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+
+            saveFileDialog.Title = "Сохранить список дел";
+            saveFileDialog.Filter = "Текстовые файлы (*.txt)|*.txt|Все файлы (*.*)|*.*";
+            saveFileDialog.FileName = "СписокДел.txt";
+            saveFileDialog.OverwritePrompt = true;
+
+            
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine("Список дел:");
+                sb.AppendLine("--------------------------------------------------");
+
+                foreach (var todoItem in toDoList)
+                {
+                    sb.AppendLine($"Заголовок: {todoItem.Title}");
+                    sb.AppendLine($"Описание: {todoItem.Description}");
+                    sb.AppendLine($"Дата: {todoItem.Date:dd.MM.yyyy}");
+                    sb.AppendLine($"Выполнено: {(todoItem.Doing ? "Да" : "Нет")}");
+                    sb.AppendLine("--------------------------------------------------");
+                }
+                File.WriteAllText(saveFileDialog.FileName, sb.ToString());
+
+            }
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            LoadJsonFile();
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            SaveJsonFile();
+        }
+
+        private void SaveJsonFile()
+        {
+            if (!Directory.Exists(_folderPath))
+            {
+                Directory.CreateDirectory(_folderPath);
+            }
+            string json = JsonConvert.SerializeObject(toDoList, Formatting.Indented);
+
+            using (StreamWriter sw = new StreamWriter(_filePath))
+            {
+                sw.Write(json);
+            }
+        }
+        private void LoadJsonFile()
+        {
+            if (File.Exists(_filePath))
+            {
+                string json = File.ReadAllText(_filePath);
+
+                var loadedToDos = JsonConvert.DeserializeObject<ObservableCollection<ToDo>>(json);
+
+                toDoList.Clear();
+                if (loadedToDos != null)
+                {
+                    foreach (var item in loadedToDos)
+                    {
+                        toDoList.Add(item);
+                    }
+                }
+            }
+            EndToDo(); 
         }
     }
 }

@@ -35,6 +35,14 @@ namespace WpfAppTaskManeger
             set { _doing = value; }
         }
 
+        public ToDo()
+        {
+            Title = "Title";
+            Date = DateTime.Now;
+            Description = "Description";
+            Doing = true;
+        }
+
         public ToDo(string title, DateTime date, string description)
         {
             Title = title;
