@@ -6,24 +6,21 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 
-namespace WpfAppTaskManeger.Converters
+namespace WpfAppTaskManeger
 {
-    public class DateTimeTommorrowDateConverter : IValueConverter
+    class DateTimeTodayDateConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var d = value as DateTime?;
-            if (d != null)
+            if (value is DateTime dueDate)
             {
-                return DateTime.Now.AddDays(1) == d.Value;
+                return dueDate.Date == DateTime.Today.Date;
             }
             return false;
         }
-
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }
-
     }
 }
