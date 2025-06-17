@@ -1,33 +1,43 @@
 ﻿using Microsoft.Win32;
 using Newtonsoft.Json;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Text;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows;
 using WpfAppTaskManeger.Model;
 
 namespace WpfAppTaskManeger
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Логика взаимодействия для MainWindow.xaml
+    /// Главное окно приложения, отображающее список дел
     /// </summary>
     public partial class MainWindow : Window
     {
+        // Статический список дел, доступный из других частей приложения
         public static List<TaskItem> toDoList = new List<TaskItem>();
 
+        // Путь к папке для хранения файлов данных
         private readonly string _folderPath = Path.Combine(Directory.GetCurrentDirectory(), "Files");
-        private readonly string _filePath; 
+        // Полный путь к JSON-файлу с данными задач
+        private readonly string _filePath;
 
+        // Пользовательская команда для удаления выбранной задачи
         public static readonly RoutedCommand DeleteToDoCommand = new RoutedCommand();
 
+        /// <summary>
+        /// Инициализирует новый экземпляр класса MainWindow
+        /// Устанавливает путь к файлу данных и инициализирует список тестовыми данными, если список пуст
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
 
             _filePath = Path.Combine(_folderPath, "todo.json");
 
+            // Инициализация тестовых данных, если список пуст
+            // Эти данные будут загружены только при первом запуске, если нет сохраненного файла
             if (toDoList.Count == 0)
             {
                 toDoList.Add(new TaskItem("Приготовить покушать", new(2024, 01, 15), "Нет описания"));
@@ -35,96 +45,112 @@ namespace WpfAppTaskManeger
                 toDoList.Add(new TaskItem("Отдохнуть", new(2024, 01, 02), "Съездить в отпуск в Сочи"));
             }
 
+            // Установка контекста данных для ListBox
             listToDo.ItemsSource = toDoList;
             listToDo.Items.Refresh();
 
+            UpdateProgress();
+        }
+
+        /// <summary>
+        /// Обработчик события загрузки главного окна
+        /// Загружает данные из JSON-файла и обновляет прогресс-бар
+        /// </summary>
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            LoadJsonFile();
             EndToDo();
         }
 
-        // кнопачке
-
-        private void buttonAdd_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Обработчик события закрытия главного окна
+        /// Сохраняет данные в JSON-файл
+        /// </summary>
+        private void Window_Closed(object sender, EventArgs e)
         {
-            OpenAddToDoWindow();
+            SaveJsonFile();
         }
 
-        private void buttonSave_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Обновляет значения прогресс-бара и текстового отображения выполненных задач
+        /// </summary>
+        private void UpdateProgress()
         {
-            SaveTxtFile();
+            int completedTasks = toDoList.Count(t => t.Doing); // Количество выполненных задач
+            int totalTasks = toDoList.Count;                   // Общее количество задач
+
+            // Обновление значения ProgressBar
+            progressToDo.Maximum = totalTasks;
+            progressToDo.Value = completedTasks;
+
+            // Обновление текстового отображения прогресса
+            progressTextToDo.Text = $"{completedTasks}/{totalTasks}";
         }
 
-        private void buttonDel_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Сохраняет список задач в JSON-файл
+        /// Создает директорию, если она не существует
+        /// </summary>
+        private void SaveJsonFile()
         {
-            TaskItem taskToDelete = (sender as Button)?.DataContext as TaskItem;
-            if (taskToDelete != null)
+            try
             {
-                MessageBoxResult result = MessageBox.Show(
-                    "Вы уверены, что хотите удалить дело?",
-                    "Удаление дела",
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Question);
-
-                if (result == MessageBoxResult.Yes)
+                if (!Directory.Exists(_folderPath))
                 {
-                    toDoList.Remove(taskToDelete);
-                    listToDo.Items.Refresh();
-                    EndToDo();
-                    SaveJsonFile();
+                    Directory.CreateDirectory(_folderPath);
+                }
+                string json = JsonConvert.SerializeObject(toDoList, Formatting.Indented);
+
+                using (StreamWriter sw = new StreamWriter(_filePath))
+                {
+                    sw.Write(json);
                 }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Не удалось определить дело для удаления.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Ошибка при сохранении JSON файла: {ex.Message}", "Ошибка сохранения", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
-        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Загружает список задач из JSON-файла
+        /// Если файл не существует или произошла ошибка, список остается пустым или тестовым
+        /// </summary>
+        private void LoadJsonFile()
         {
-            TaskItem? checkedTask = (sender as CheckBox)?.DataContext as TaskItem;
-            if (checkedTask != null)
+            try
             {
-                checkedTask.Doing = true;
-                listToDo.Items.Refresh();
-                EndToDo();
-                SaveJsonFile();
-            }
-        }
-
-        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            TaskItem? uncheckedTask = (sender as CheckBox)?.DataContext as TaskItem;
-            if (uncheckedTask != null)
-            {
-                uncheckedTask.Doing = false;
-                listToDo.Items.Refresh();
-                EndToDo();
-                SaveJsonFile();
-            }
-        }
-
-        public void EndToDo()
-        {
-            progressToDo.Minimum = 0;
-            progressToDo.Maximum = toDoList.Count();
-
-            int cmpltTaskCount = 0;
-
-            foreach (var item in toDoList)
-            {
-                if (item.Doing)
+                if (File.Exists(_filePath))
                 {
-                    cmpltTaskCount++;
+                    string json = File.ReadAllText(_filePath);
+
+                    var loadedToDos = JsonConvert.DeserializeObject<List<TaskItem>>(json);
+
+                    toDoList.Clear();
+                    if (loadedToDos != null)
+                    {
+                        foreach (var item in loadedToDos)
+                        {
+                            toDoList.Add(item);
+                        }
+                    }
                 }
             }
-
-            progressToDo.Value = cmpltTaskCount;
-            progressTextToDo.Text = $"{cmpltTaskCount}/{toDoList.Count()}";
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при загрузке JSON файла: {ex.Message}", "Ошибка загрузки", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                listToDo.Items.Refresh();
+                UpdateProgress();
+            }
         }
 
-        // Операции Файлов
-
-        //// ТхТ
-
+        /// <summary>
+        /// Сохраняет список задач в текстовый файл
+        /// Открывает диалоговое окно для выбора места сохранения
+        /// </summary>
         private void SaveTxtFile()
         {
             if (toDoList.Count() == 0)
@@ -160,93 +186,138 @@ namespace WpfAppTaskManeger
             }
         }
 
-        
-        //// джсын
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Метод вызывается при изменении списка дел (добавление, удаление, изменение статуса)
+        /// Обновляет отображение списка и прогресс-бар, а также сохраняет данные
+        /// Это централизованная точка для обновления UI и сохранения состояния
+        /// </summary>
+        public void EndToDo()
         {
-            LoadJsonFile();
+            listToDo.Items.Refresh(); // Обновление привязки данных ListBox
+            UpdateProgress();         // Обновление прогресс-бара
+            SaveJsonFile();           // Сохранение изменений в файл
         }
 
-        private void Window_Closed(object sender, EventArgs e)
+        /// <summary>
+        /// Обработчик нажатия на кнопку "Сохранить" в главном окне
+        /// Вызывает метод для сохранения списка дел в текстовый файл
+        /// </summary>
+        private void buttonSave_Click(object sender, RoutedEventArgs e)
         {
-            SaveJsonFile();
+            SaveTxtFile();
         }
 
-        private void SaveJsonFile()
+        /// <summary>
+        /// Обработчик нажатия на кнопку "Добавить" в главном окне
+        /// Открывает новое окно для добавления задачи
+        /// </summary>
+        private void buttonAdd_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                if (!Directory.Exists(_folderPath))
-                {
-                    Directory.CreateDirectory(_folderPath);
-                }
-                string json = JsonConvert.SerializeObject(toDoList, Formatting.Indented);
+            OpenAddToDoWindow();
+        }
 
-                using (StreamWriter sw = new StreamWriter(_filePath))
+        /// <summary>
+        /// Обработчик нажатия на кнопку "Удалить" внутри элемента списка
+        /// Удаляет выбранную задачу из списка после подтверждения
+        /// </summary>
+        private void buttonDel_Click(object sender, RoutedEventArgs e)
+        {
+            // Получаем DataContext кнопки, который является TaskItem, связанный с этой строкой списка.
+            Button? button = sender as Button;
+            TaskItem? taskToDelete = button?.DataContext as TaskItem;
+
+            if (taskToDelete != null)
+            {
+                MessageBoxResult result = MessageBox.Show(
+                    "Вы уверены, что хотите удалить дело?",
+                    "Удаление дела",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question);
+
+                if (result == MessageBoxResult.Yes)
                 {
-                    sw.Write(json);
+                    toDoList.Remove(taskToDelete);
+                    EndToDo();
                 }
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show($"Ошибка при сохранении JSON файла: {ex.Message}", "Ошибка сохранения", MessageBoxButton.OK, MessageBoxImage.Error);
+                // Это сообщение, вероятно, не будет показано, так как кнопка всегда привязана к TaskItem
+                // но оставлено для полноты обработки возможных сценариев
+                MessageBox.Show("Не удалось определить дело для удаления. Пожалуйста, попробуйте снова.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
-        private void LoadJsonFile()
+        /// <summary>
+        /// Обработчик события установки флажка (CheckBox) для задачи
+        /// Изменяет статус выполнения задачи на "выполнено" и обновляет UI
+        /// </summary>
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                if (File.Exists(_filePath))
-                {
-                    string json = File.ReadAllText(_filePath);
+            // Получаем DataContext CheckBox, который является TaskItem, связанный с этой строкой списка
+            CheckBox? checkBox = sender as CheckBox;
+            TaskItem? changedTask = checkBox?.DataContext as TaskItem;
 
-                    var loadedToDos = JsonConvert.DeserializeObject<List<TaskItem>>(json);
-
-                    toDoList.Clear();
-                    if (loadedToDos != null)
-                    {
-                        foreach (var item in loadedToDos)
-                        {
-                            toDoList.Add(item);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
+            if (changedTask != null)
             {
-                MessageBox.Show($"Ошибка при загрузке JSON файла: {ex.Message}", "Ошибка загрузки", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            finally
-            {
-                listToDo.Items.Refresh();
+                changedTask.Doing = true;
                 EndToDo();
             }
         }
 
-        
+        /// <summary>
+        /// Обработчик события снятия флажка (CheckBox) для задачи
+        /// Изменяет статус выполнения задачи на "не выполнено" и обновляет UI
+        /// </summary>
+        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            // Получаем DataContext CheckBox, который является TaskItem, связанный с этой строкой списка
+            CheckBox? checkBox = sender as CheckBox;
+            TaskItem? changedTask = checkBox?.DataContext as TaskItem;
 
+            if (changedTask != null)
+            {
+                changedTask.Doing = false;
+                EndToDo();
+            }
+        }
+
+        /// <summary>
+        /// Обработчик выполнения команды ApplicationCommands.New (например, Ctrl+N)
+        /// Открывает окно для добавления новой задачи
+        /// </summary>
         private void NewCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             OpenAddToDoWindow();
         }
 
+        /// <summary>
+        /// Открывает дочернее окно для добавления новой задачи
+        /// Обновляет список и сохраняет данные после закрытия дочернего окна
+        /// </summary>
         private void OpenAddToDoWindow()
         {
             AddToDo addToDoWindow = new AddToDo();
-            addToDoWindow.Owner = this;
-            addToDoWindow.ShowDialog();
+            addToDoWindow.Owner = this; // Устанавливаем владельца окна, чтобы оно было центрировано относительно родителя
+            addToDoWindow.ShowDialog(); // Открываем окно как модальное диалоговое, блокируя родительское
 
-            listToDo.Items.Refresh();
             EndToDo();
-            SaveJsonFile();
         }
 
+        /// <summary>
+        /// Обработчик выполнения команды ApplicationCommands.Save (например, Ctrl+S)
+        /// Вызывает метод для сохранения списка дел в текстовый файл
+        /// </summary>
         private void SaveCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             SaveTxtFile();
         }
 
+        /// <summary>
+        /// Обработчик выполнения команды DeleteToDoCommand
+        /// Удаляет выбранную задачу из списка после подтверждения
+        /// Эта команда обрабатывает удаление через выбор элемента в списке
+        /// </summary>
         private void DeleteCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             TaskItem? taskToDelete = listToDo.SelectedItem as TaskItem;
@@ -261,13 +332,12 @@ namespace WpfAppTaskManeger
                 if (result == MessageBoxResult.Yes)
                 {
                     toDoList.Remove(taskToDelete);
-                    listToDo.Items.Refresh();
                     EndToDo();
-                    SaveJsonFile();
                 }
             }
             else
             {
+                // Вывод предупреждения, если для удаления не выбран элемент.
                 MessageBox.Show("Пожалуйста, выберите дело для удаления.", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }

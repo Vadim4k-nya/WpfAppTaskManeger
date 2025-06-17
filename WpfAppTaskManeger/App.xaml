@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:WpfAppTaskManeger"
              StartupUri="View/MainWindow.xaml">
+    
     <Application.Resources>
         <Style TargetType="Button">
             <Style.Setters>
@@ -18,11 +19,13 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        
         <Style TargetType="TextBox">
             <Style.Setters>
                 <Setter Property="BorderThickness" Value="1.5"/>
                 <Setter Property="BorderBrush" Value="#5EBEC4"/>
             </Style.Setters>
+            
             <Style.Triggers>
                 <Trigger Property="Control.IsFocused" Value="True">
                     <Setter Property="Background" Value="#FFFFFAD6"/>
@@ -30,6 +33,7 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        
         <Style x:Key="HeaderStyle">
             <Setter Property="Control.FontSize" Value="26"/>
             <Setter Property="Control.Margin" Value="5"/>
@@ -37,8 +41,5 @@
             <Setter Property="Control.FontWeight" Value="DemiBold"/>
             <Setter Property="Control.FontFamily" Value="Cascadia Mono"/>
         </Style>
-
-        
-        
     </Application.Resources>
 </Application>
