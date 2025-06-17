@@ -18,10 +18,14 @@ namespace WpfAppTaskManeger
     /// <summary>
     /// Логика взаимодействия для AddToDo.xaml
     /// </summary>
+    /// 
     public partial class AddToDo : Window
     {
-        public DateTime defDate = new DateTime(2024, 01, 10);
+        public DateTime defDate = DateTime.Today;
         public string defDescription = "Описания нет";
+
+        // Declare custom command for saving a new ToDo in this window
+        public static readonly RoutedCommand SaveNewToDoCommand = new RoutedCommand();
 
         public AddToDo()
         {
@@ -32,13 +36,19 @@ namespace WpfAppTaskManeger
 
         private void buttonSave_Click(object sender, RoutedEventArgs e)
         {
-            if (dateToDo.SelectedDate != null)
+            SaveNewToDoItem();
+        }
+
+        private void SaveNewToDo_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            SaveNewToDoItem();
+        }
+
+        private void SaveNewToDoItem()
+        {
+            if (dateToDo.SelectedDate != null && !string.IsNullOrWhiteSpace(titleToDo.Text))
             {
                 MainWindow.toDoList.Add(new ToDo(titleToDo.Text, dateToDo.SelectedDate.Value, descriptionToDo.Text));
-
-                (this.Owner as MainWindow).listToDo.Items.Refresh();
-
-                (this.Owner as MainWindow).EndToDo();
 
                 titleToDo.Text = string.Empty;
                 dateToDo.SelectedDate = defDate;
@@ -48,10 +58,8 @@ namespace WpfAppTaskManeger
             }
             else
             {
-                MessageBox.Show("ненене");
+                MessageBox.Show("Пожалуйста, заполните название и выберите дату.", "Ошибка добавления", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
-            
         }
-
     }
 }

@@ -7,11 +7,13 @@
         mc:Ignorable="d"
         Title="Список дел" Height="450" Width="400" Icon="/Image/icon.png"
         Loaded="Window_Loaded" Closed="Window_Closed">
+    <Window.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.New" Executed="NewCommand_Executed"/>
+        <CommandBinding Command="ApplicationCommands.Save" Executed="SaveCommand_Executed"/>
+    </Window.CommandBindings>
     <Window.Resources>
         <Style TargetType="ListBox">
             <Setter Property="Background" Value="#FDF5DF"/>
-
-            
         </Style>
         <Style TargetType="ProgressBar">
             <Setter Property="Background" Value="#FDF5DF"/>
@@ -75,7 +77,18 @@
                             <CheckBox IsChecked="{Binding Path=Doing}" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" 
                                       VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="0" Grid.Row="0"/>
 
-                            <TextBlock Text="{Binding Path=Title}" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1" />
+                            <TextBlock Text="{Binding Path=Title}" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Path=Doing}" Value="True">
+                                                <Setter Property="TextDecorations" Value="Strikethrough"/>
+                                                <Setter Property="Foreground" Value="Gray"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
 
                             <TextBlock Text="{Binding Path=Date, StringFormat=dd.MM.yyyy}" 
                                        VerticalAlignment="Center" Grid.Row="0" Grid.Column="2">

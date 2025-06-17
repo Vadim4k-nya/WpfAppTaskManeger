@@ -6,6 +6,14 @@
         xmlns:local="clr-namespace:WpfAppTaskManeger"
         mc:Ignorable="d"
         Title="Добавить задачу" Height="450" Width="400" ResizeMode="NoResize" Icon="/Image/add.png">
+
+    <Window.CommandBindings>
+        <CommandBinding Command="{x:Static local:AddToDo.SaveNewToDoCommand}" Executed="SaveNewToDo_Executed"/>
+    </Window.CommandBindings>
+    <Window.InputBindings>
+        <KeyBinding Key="Return" Command="{x:Static local:AddToDo.SaveNewToDoCommand}"/>
+    </Window.InputBindings>
+
     <Window.Resources>
         <Style TargetType="DatePicker">
             <Setter Property="SelectedDateFormat" Value="Long"/>
