@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace WpfAppTaskManeger
+namespace WpfAppTaskManeger.Model
 {
-    public class ToDo
+    public class TaskItem
     {
         private string _title;
         private DateTime _date;
@@ -35,7 +35,7 @@ namespace WpfAppTaskManeger
             set { _doing = value; }
         }
 
-        public ToDo()
+        public TaskItem()
         {
             Title = "Title";
             Date = DateTime.Now;
@@ -43,14 +43,14 @@ namespace WpfAppTaskManeger
             Doing = true;
         }
 
-        public ToDo(string title, DateTime date, string description)
+        public TaskItem(string title, DateTime date, string description)
         {
             Title = title;
             Date = date;
             Description = description;
         }
 
-        public ToDo(string title, DateTime date, string description, bool doing) 
+        public TaskItem(string title, DateTime date, string description, bool doing) 
             : this(title, date, description)
         {
             Doing = doing;

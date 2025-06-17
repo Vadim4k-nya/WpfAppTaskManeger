@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using WpfAppTaskManeger.Model;
 
 namespace WpfAppTaskManeger
 {
@@ -48,7 +49,7 @@ namespace WpfAppTaskManeger
         {
             if (dateToDo.SelectedDate != null && !string.IsNullOrWhiteSpace(titleToDo.Text))
             {
-                MainWindow.toDoList.Add(new ToDo(titleToDo.Text, dateToDo.SelectedDate.Value, descriptionToDo.Text));
+                MainWindow.toDoList.Add(new TaskItem(titleToDo.Text, dateToDo.SelectedDate.Value, descriptionToDo.Text));
 
                 titleToDo.Text = string.Empty;
                 dateToDo.SelectedDate = defDate;

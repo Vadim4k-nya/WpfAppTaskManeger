@@ -6,6 +6,7 @@ using System.Text;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows;
+using WpfAppTaskManeger.Model;
 
 namespace WpfAppTaskManeger
 {
@@ -14,7 +15,7 @@ namespace WpfAppTaskManeger
     /// </summary>
     public partial class MainWindow : Window
     {
-        public static List<ToDo> toDoList = new List<ToDo>();
+        public static List<TaskItem> toDoList = new List<TaskItem>();
 
         private readonly string _folderPath = Path.Combine(Directory.GetCurrentDirectory(), "Files");
         private readonly string _filePath; 
@@ -29,9 +30,9 @@ namespace WpfAppTaskManeger
 
             if (toDoList.Count == 0)
             {
-                toDoList.Add(new ToDo("Приготовить покушать", new(2024, 01, 15), "Нет описания"));
-                toDoList.Add(new ToDo("Поработать", new(2024, 01, 20), "Съездить на совещание в Москву"));
-                toDoList.Add(new ToDo("Отдохнуть", new(2024, 01, 02), "Съездить в отпуск в Сочи"));
+                toDoList.Add(new TaskItem("Приготовить покушать", new(2024, 01, 15), "Нет описания"));
+                toDoList.Add(new TaskItem("Поработать", new(2024, 01, 20), "Съездить на совещание в Москву"));
+                toDoList.Add(new TaskItem("Отдохнуть", new(2024, 01, 02), "Съездить в отпуск в Сочи"));
             }
 
             listToDo.ItemsSource = toDoList;
@@ -54,7 +55,7 @@ namespace WpfAppTaskManeger
 
         private void buttonDel_Click(object sender, RoutedEventArgs e)
         {
-            ToDo taskToDelete = (sender as Button)?.DataContext as ToDo;
+            TaskItem taskToDelete = (sender as Button)?.DataContext as TaskItem;
             if (taskToDelete != null)
             {
                 MessageBoxResult result = MessageBox.Show(
@@ -79,7 +80,7 @@ namespace WpfAppTaskManeger
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            ToDo? checkedTask = (sender as CheckBox)?.DataContext as ToDo;
+            TaskItem? checkedTask = (sender as CheckBox)?.DataContext as TaskItem;
             if (checkedTask != null)
             {
                 checkedTask.Doing = true;
@@ -91,7 +92,7 @@ namespace WpfAppTaskManeger
 
         private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
-            ToDo? uncheckedTask = (sender as CheckBox)?.DataContext as ToDo;
+            TaskItem? uncheckedTask = (sender as CheckBox)?.DataContext as TaskItem;
             if (uncheckedTask != null)
             {
                 uncheckedTask.Doing = false;
@@ -200,7 +201,7 @@ namespace WpfAppTaskManeger
                 {
                     string json = File.ReadAllText(_filePath);
 
-                    var loadedToDos = JsonConvert.DeserializeObject<List<ToDo>>(json);
+                    var loadedToDos = JsonConvert.DeserializeObject<List<TaskItem>>(json);
 
                     toDoList.Clear();
                     if (loadedToDos != null)
@@ -248,7 +249,7 @@ namespace WpfAppTaskManeger
 
         private void DeleteCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            ToDo? taskToDelete = listToDo.SelectedItem as ToDo;
+            TaskItem? taskToDelete = listToDo.SelectedItem as TaskItem;
             if (taskToDelete != null)
             {
                 MessageBoxResult result = MessageBox.Show(
