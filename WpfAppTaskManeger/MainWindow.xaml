@@ -40,7 +40,8 @@
             </Grid>
 
 
-            <ListBox x:Name="listToDo" HorizontalContentAlignment="Stretch" Margin="5">
+            <ListBox x:Name="listToDo" HorizontalContentAlignment="Stretch" Margin="5"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Hidden">
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
                         <Style.Triggers>
@@ -54,10 +55,10 @@
                     <DataTemplate>
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="0.1*"/>
+                                <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="0.5*"/>
-                                <ColumnDefinition Width="0.2*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="1*"/>
@@ -102,9 +103,20 @@
                             <Button Click="buttonDel_Click" Background="#5EBEC4" Margin="5" MaxWidth="20" Grid.Column="3">
                                 <Image Source="/Image/delete.png" MaxHeight="10" MaxWidth="10" IsEnabled="False"/>
                             </Button>
+                            
+                            <!--
+                            <TextBlock MaxHeight="86"
+                                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                        ScrollViewer.VerticalScrollBarVisibility="Visible"
+                                       ScrollViewer.CanContentScroll="True"
+                                       TextWrapping="Wrap"  />
+-->
+                            <ScrollViewer Grid.Row="1" Grid.ColumnSpan="4" MaxHeight="86"
+                                          HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                                <TextBlock Text="{Binding Path=Description}" ScrollViewer.CanContentScroll="True" Margin="3"
+                                           TextWrapping="Wrap"/>
+                            </ScrollViewer>
 
-                            <TextBlock Text="{Binding Path=Description}" TextWrapping="Wrap" 
-                                       HorizontalAlignment="Stretch" Grid.Row="1" Grid.ColumnSpan="4"/>
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
