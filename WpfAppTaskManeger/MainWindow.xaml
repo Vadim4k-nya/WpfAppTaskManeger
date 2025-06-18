@@ -104,13 +104,6 @@
                                 <Image Source="/Image/delete.png" MaxHeight="10" MaxWidth="10" IsEnabled="False"/>
                             </Button>
                             
-                            <!--
-                            <TextBlock MaxHeight="86"
-                                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                        ScrollViewer.VerticalScrollBarVisibility="Visible"
-                                       ScrollViewer.CanContentScroll="True"
-                                       TextWrapping="Wrap"  />
--->
                             <ScrollViewer Grid.Row="1" Grid.ColumnSpan="4" MaxHeight="86"
                                           HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                                 <TextBlock Text="{Binding Path=Description}" ScrollViewer.CanContentScroll="True" Margin="3"
