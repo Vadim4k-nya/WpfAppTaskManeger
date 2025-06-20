@@ -75,14 +75,14 @@
                                 <RowDefinition Height="1*"/>
                                 <RowDefinition Height="1*"/>
                             </Grid.RowDefinitions>
-                            <CheckBox IsChecked="{Binding Path=Doing}" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" 
+                            <CheckBox IsChecked="{Binding Path=IsCompleted}" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" 
                                       VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="0" Grid.Row="0"/>
 
                             <TextBlock Text="{Binding Path=Title}" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Path=Doing}" Value="True">
+                                            <DataTrigger Binding="{Binding Path=IsCompleted}" Value="True">
                                                 <Setter Property="TextDecorations" Value="Strikethrough"/>
                                                 <Setter Property="Foreground" Value="Gray"/>
                                             </DataTrigger>
