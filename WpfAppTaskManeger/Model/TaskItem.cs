@@ -8,9 +8,9 @@
     {
         // Приватные поля для хранения данных задачи
         private string _title;
-        private DateTime _date;
+        private DateTime _dueDate;
         private string _description;
-        private bool _doing;
+        private bool _isCompleted;
 
         /// <summary>
         /// Получает или устанавливает название задачи
@@ -24,10 +24,10 @@
         /// <summary>
         /// Получает или устанавливает дату, к которой задача должна быть выполнена
         /// </summary>
-        public DateTime Date
+        public DateTime DueDate
         {
-            get { return _date; }
-            set { _date = value; }
+            get { return _dueDate; }
+            set { _dueDate = value; }
         }
 
         /// <summary>
@@ -42,10 +42,10 @@
         /// <summary>
         /// Получает или устанавливает статус выполнения задачи (true - выполнено, false - не выполнено)
         /// </summary>
-        public bool Doing
+        public bool IsCompleted
         {
-            get { return _doing; }
-            set { _doing = value; }
+            get { return _isCompleted; }
+            set { _isCompleted = value; }
         }
 
         /// <summary>
@@ -54,9 +54,9 @@
         public TaskItem()
         {
             Title = "Title";
-            Date = DateTime.Now;
+            DueDate = DateTime.Now;
             Description = "Description";
-            Doing = true;
+            IsCompleted = true;
         }
 
         /// <summary>
@@ -65,7 +65,7 @@
         public TaskItem(string title, DateTime date, string description)
         {
             Title = title;
-            Date = date;
+            DueDate = date;
             Description = description;
         }
 
@@ -75,7 +75,7 @@
         public TaskItem(string title, DateTime date, string description, bool doing) 
             : this(title, date, description)
         {
-            Doing = doing;
+            IsCompleted = doing;
         }
     }
 }

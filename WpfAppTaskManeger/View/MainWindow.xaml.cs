@@ -76,7 +76,7 @@ namespace WpfAppTaskManeger
         /// </summary>
         private void UpdateProgress()
         {
-            int completedTasks = toDoList.Count(t => t.Doing); // Количество выполненных задач
+            int completedTasks = toDoList.Count(t => t.IsCompleted); // Количество выполненных задач
             int totalTasks = toDoList.Count;                   // Общее количество задач
 
             // Обновление значения ProgressBar
@@ -174,11 +174,11 @@ namespace WpfAppTaskManeger
 
                 foreach (var todoItem in toDoList)
                 {
-                    sb.AppendLine($"{(todoItem.Doing ? "✔" : "")}{todoItem.Title}");
+                    sb.AppendLine($"{(todoItem.IsCompleted ? "✔" : "")}{todoItem.Title}");
                     sb.AppendLine();
                     sb.AppendLine($"{todoItem.Description}");
                     sb.AppendLine();
-                    sb.AppendLine($"{todoItem.Date:dd.MM.yyyy}");
+                    sb.AppendLine($"{todoItem.DueDate:dd.MM.yyyy}");
                     sb.AppendLine();
                     sb.AppendLine();
                 }
@@ -260,7 +260,7 @@ namespace WpfAppTaskManeger
 
             if (changedTask != null)
             {
-                changedTask.Doing = true;
+                changedTask.IsCompleted = true;
                 EndToDo();
             }
         }
@@ -277,7 +277,7 @@ namespace WpfAppTaskManeger
 
             if (changedTask != null)
             {
-                changedTask.Doing = false;
+                changedTask.IsCompleted = false;
                 EndToDo();
             }
         }
