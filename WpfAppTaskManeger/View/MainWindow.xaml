@@ -3,7 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WpfAppTaskManeger" xmlns:local1="clr-namespace:WpfAppTaskManeger.Converters"
+        xmlns:local="clr-namespace:WpfAppTaskManeger"
+        xmlns:converters="clr-namespace:WpfAppTaskManeger.Converters"
         mc:Ignorable="d"
         Title="Список дел" Height="450" Width="400" Icon="/Image/icon.png"
         Loaded="Window_Loaded" Closed="Window_Closed">
@@ -20,9 +21,9 @@
             <Setter Property="Foreground" Value="#5EBEC4"/>
         </Style>
 
-        <local1:DateTimeLessDateConverter x:Key="LessDayConverter"/>
-        <local1:DateTimeTodayDateConverter x:Key="TodayDayConverter"/>
-        <local1:DateTimeTomorrowDateConverter x:Key="TomorrowDayConverter"/>
+        <converters:DateTimeLessDateConverter x:Key="LessDayConverter"/>
+        <converters:DateTimeTodayDateConverter x:Key="TodayDayConverter"/>
+        <converters:DateTimeTomorrowDateConverter x:Key="TomorrowDayConverter"/>
 
     </Window.Resources>
     <Grid Background="#FFFDFAF1">
