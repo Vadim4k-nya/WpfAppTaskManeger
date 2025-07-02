@@ -14,10 +14,9 @@ namespace WpfAppTaskManeger.Converters
         /// </summary>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var d = value as DateTime?;
-            if(d!= null)
+            if (value is DateTime dueDate)
             {
-                return DateTime.Now > d.Value;
+                return dueDate.Date < DateTime.Today.Date;
             }
             return false;
         }

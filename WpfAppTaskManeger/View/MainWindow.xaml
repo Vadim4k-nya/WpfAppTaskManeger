@@ -7,10 +7,11 @@
         xmlns:converters="clr-namespace:WpfAppTaskManeger.Converters"
         mc:Ignorable="d"
         Title="Список дел" Height="450" Width="400" Icon="/Image/icon.png"
-        Loaded="Window_Loaded" Closed="Window_Closed">
+        Loaded="Window_Loaded">
     <Window.CommandBindings>
         <CommandBinding Command="ApplicationCommands.New" Executed="NewCommand_Executed"/>
         <CommandBinding Command="ApplicationCommands.Save" Executed="SaveCommand_Executed"/>
+        <CommandBinding Command="ApplicationCommands.Delete" Executed="DeleteCommand_Executed" CanExecute="DeleteCommand_CanExecute"/>
     </Window.CommandBindings>
     <Window.Resources>
         <Style TargetType="ListBox">
@@ -25,6 +26,13 @@
         <converters:DateTimeTodayDateConverter x:Key="TodayDayConverter"/>
         <converters:DateTimeTomorrowDateConverter x:Key="TomorrowDayConverter"/>
 
+        <Style TargetType="ListBoxItem">
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="FontWeight" Value="SemiBold"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
     <Grid Background="#FFFDFAF1">
         <DockPanel x:Name="dockPanel">
@@ -32,7 +40,7 @@
                 <TextBlock Text="Список дел" Style="{StaticResource HeaderStyle}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                    <Button Name="buttonSave" Click="buttonSave_Click"
+                    <Button Name="buttonSave" Command="{Binding SaveTasksTxtCommand}"
                             ToolTip="Сохранить список дел в текстовый файл"
                             MaxHeight="35" Margin="5" Padding="10,5,10,5">
                         <Image Source="/Image/save.png"/>
@@ -47,21 +55,14 @@
             </Grid>
 
             <Grid DockPanel.Dock="Bottom">
-                <ProgressBar x:Name="progressToDo" MinHeight="25" Margin="5" Minimum="0"/>
-                <TextBlock x:Name="progressTextToDo" HorizontalAlignment="Center" VerticalAlignment="Center" Text="0/0"/>
+                <ProgressBar x:Name="progressToDo" MinHeight="25" Margin="5" Minimum="0"
+                             Value="{Binding CompletedTasks}" Maximum="{Binding TotalTasks}"/>
+                <TextBlock x:Name="progressTextToDo" HorizontalAlignment="Center" VerticalAlignment="Center"
+                           Text="{Binding ProgressTextToDo}"/>
             </Grid>
 
-
-            <ListBox x:Name="listToDo" HorizontalContentAlignment="Stretch" Margin="5">
-                <ListBox.ItemContainerStyle>
-                    <Style TargetType="ListBoxItem">
-                        <Style.Triggers>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="FontWeight" Value="SemiBold"/>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </ListBox.ItemContainerStyle>
+            <ListBox x:Name="listToDo" HorizontalContentAlignment="Stretch" Margin="5"
+                     ItemsSource="{Binding ToDoList}" SelectedItem="{Binding SelectedTask}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Grid>
@@ -75,10 +76,10 @@
                                 <RowDefinition Height="1*"/>
                                 <RowDefinition Height="1*"/>
                             </Grid.RowDefinitions>
-                            <CheckBox IsChecked="{Binding Path=IsCompleted}" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" 
+                            <CheckBox IsChecked="{Binding IsCompleted}"
                                       VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="0" Grid.Row="0"/>
 
-                            <TextBlock Text="{Binding Path=Title}" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1">
+                            <TextBlock Text="{Binding Title}" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Style.Triggers>
@@ -91,19 +92,19 @@
                                 </TextBlock.Style>
                             </TextBlock>
 
-                            <TextBlock Text="{Binding Path=Date, StringFormat=dd.MM.yyyy}" 
+                            <TextBlock Text="{Binding DueDate, StringFormat=dd.MM.yyyy}"
                                        VerticalAlignment="Center" Grid.Row="0" Grid.Column="2">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="Foreground" Value="Green"/>
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Path=Date, Converter={StaticResource LessDayConverter}}" Value="True">
+                                            <DataTrigger Binding="{Binding DueDate, Converter={StaticResource LessDayConverter}}" Value="True">
                                                 <Setter Property="Foreground" Value="Red"/>
                                             </DataTrigger>
-                                            <DataTrigger Binding="{Binding Path=Date, Converter={StaticResource TodayDayConverter}}" Value="True">
+                                            <DataTrigger Binding="{Binding DueDate, Converter={StaticResource TodayDayConverter}}" Value="True">
                                                 <Setter Property="Foreground" Value="#FFEA6A20"/>
                                             </DataTrigger>
-                                            <DataTrigger Binding="{Binding Path=Date, Converter={StaticResource TomorrowDayConverter}}" Value="True">
+                                            <DataTrigger Binding="{Binding DueDate, Converter={StaticResource TomorrowDayConverter}}" Value="True">
                                                 <Setter Property="Foreground" Value="#DAA520"/>
                                             </DataTrigger>
                                         </Style.Triggers>
@@ -115,13 +116,13 @@
                                 <Image Source="/Image/delete.png" MaxHeight="10" MaxWidth="10" IsEnabled="False"/>
                             </Button>
 
-                            <TextBlock Text="{Binding Path=Description}" TextWrapping="Wrap" 
+                            <TextBlock Text="{Binding Description}" TextWrapping="Wrap"
                                        HorizontalAlignment="Stretch" Grid.Row="1" Grid.ColumnSpan="4"/>
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            
+
         </DockPanel>
     </Grid>
 </Window>

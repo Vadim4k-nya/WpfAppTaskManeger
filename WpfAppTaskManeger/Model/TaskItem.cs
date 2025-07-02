@@ -1,10 +1,12 @@
-﻿namespace WpfAppTaskManeger.Model
+﻿using System.ComponentModel;
+
+namespace WpfAppTaskManeger.Model
 {
     /// <summary>
     /// Отдельный элемент задачи в списке дел
     /// Содержит информацию о названии, дате выполнения, описании и статусе выполнения
     /// </summary>
-    public class TaskItem
+    public class TaskItem : INotifyPropertyChanged
     {
         // Приватные поля для хранения данных задачи
         private string _title;
@@ -12,13 +14,22 @@
         private string _description;
         private bool _isCompleted;
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
         /// <summary>
         /// Получает или устанавливает название задачи
         /// </summary>
         public string Title
         {
             get { return _title; }
-            set { _title = value; }
+            set
+            {
+                if (_title != value)
+                {
+                    _title = value;
+                    OnPropertyChanged(nameof(Title));
+                }
+            }
         }
 
         /// <summary>
@@ -27,7 +38,14 @@
         public DateTime DueDate
         {
             get { return _dueDate; }
-            set { _dueDate = value; }
+            set
+            {
+                if (_dueDate != value)
+                {
+                    _dueDate = value;
+                    OnPropertyChanged(nameof(DueDate));
+                }
+            }
         }
 
         /// <summary>
@@ -36,7 +54,14 @@
         public string Description
         {
             get { return _description; }
-            set { _description = value; }
+            set
+            {
+                if (_description != value)
+                {
+                    _description = value;
+                    OnPropertyChanged(nameof(Description));
+                }
+            }
         }
 
         /// <summary>
@@ -45,7 +70,14 @@
         public bool IsCompleted
         {
             get { return _isCompleted; }
-            set { _isCompleted = value; }
+            set
+            {
+                if (_isCompleted != value)
+                {
+                    _isCompleted = value;
+                    OnPropertyChanged(nameof(IsCompleted));
+                }
+            }
         }
 
         /// <summary>
@@ -56,7 +88,7 @@
             Title = "Title";
             DueDate = DateTime.Now;
             Description = "Description";
-            IsCompleted = true;
+            IsCompleted = false;
         }
 
         /// <summary>
@@ -67,15 +99,21 @@
             Title = title;
             DueDate = date;
             Description = description;
+            IsCompleted = false;
         }
 
         /// <summary>
         /// Инициализирует новый экземпляр класса TaskItem с заданными названием, датой, описанием и статусом выполнения
         /// </summary>
-        public TaskItem(string title, DateTime date, string description, bool doing) 
+        public TaskItem(string title, DateTime date, string description, bool doing)
             : this(title, date, description)
         {
             IsCompleted = doing;
+        }
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
