@@ -62,15 +62,16 @@
             </Grid>
 
             <ListBox x:Name="listToDo" HorizontalContentAlignment="Stretch" Margin="5"
-                     ItemsSource="{Binding ToDoList}" SelectedItem="{Binding SelectedTask}">
+                     ItemsSource="{Binding ToDoList}" SelectedItem="{Binding SelectedTask}"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Hidden">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="0.1*"/>
+                                <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="0.5*"/>
-                                <ColumnDefinition Width="0.2*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="1*"/>
@@ -116,8 +117,10 @@
                                 <Image Source="/Image/delete.png" MaxHeight="10" MaxWidth="10" IsEnabled="False"/>
                             </Button>
 
-                            <TextBlock Text="{Binding Description}" TextWrapping="Wrap"
-                                       HorizontalAlignment="Stretch" Grid.Row="1" Grid.ColumnSpan="4"/>
+                            <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="86" 
+                                          HorizontalAlignment="Stretch" Grid.Row="1" Grid.ColumnSpan="4">
+                                <TextBlock Text="{Binding Description}" TextWrapping="Wrap"/>
+                            </ScrollViewer>
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
